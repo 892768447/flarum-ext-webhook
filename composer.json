@@ -1,0 +1,45 @@
+{
+    "name": "irony/flarum-ext-webhook",
+    "description": "provides some event webhooks",
+    "keywords": [
+        "extension",
+        "flarum",
+        "webhook"
+    ],
+    "type": "flarum-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Irony",
+            "email": "892768447@qq.com",
+            "homepage": "https://pyqt.site/"
+        }
+    ],
+    "require": {
+        "flarum/core": "^0.1.0-beta.10",
+        "flarum/approval": "^0.1.0-beta.8"
+    },
+    "support": {
+        "issues": "https://github.com/892768447/flarum-ext-webhook/issues",
+        "source": "https://github.com/892768447/flarum-ext-webhook"
+    },
+    "extra": {
+        "flarum-extension": {
+            "title": "Webhook",
+            "icon": {
+                "name": "fas fa-pastafarianism",
+                "backgroundColor": "#40b6e0",
+                "color": "#fff"
+            }
+        },
+        "flagrow": {
+            "discuss": "",
+            "github": "https://github.com/892768447/flarum-ext-webhook"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Irony\\Webhook\\": "src/"
+        }
+    }
+}
