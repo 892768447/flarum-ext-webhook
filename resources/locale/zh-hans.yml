@@ -1,0 +1,5 @@
+flarum-ext-webhook:
+  admin:
+    settings:
+      title: Webhook 设置
+      approved_label: 文章审核通过

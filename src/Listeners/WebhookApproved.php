@@ -2,22 +2,21 @@
 
 namespace Irony\Webhook\Listeners;
 
+use Exception;
 use Flarum\Approval\Event\PostWasApproved;
-use s9e\TextFormatter\Utils\Http\Client;
+use Flarum\Settings\SettingsRepositoryInterface;
+use s9e\TextFormatter\Utils\Http;
 
-class WebhookApproved extends Client
+class WebhookApproved
 {
-    protected $client;
-
     /**
-     * WebhookApproved constructor.
-     * @param Client $client
+     * @var SettingsRepositoryInterface
      */
-    public function __construct(Client $client)
+    protected $settings;
+
+    public function __construct(SettingsRepositoryInterface $settings)
     {
-        $this->client = $client;
-        $this->timeout = $client->timeout;
-        $this->sslVerifyPeer = $client->sslVerifyPeer;
+        $this->settings = $settings;
     }
 
     /**
@@ -27,10 +26,19 @@ class WebhookApproved extends Client
     {
         $post = $event->post;
         $discussion = $post->discussion;
+        $url = $this->settings->get('irony.webhook.urls.approved');
 
-        if ($post->number == 1 && $discussion->is_approved) {
-            $headers = ['Content-Type' => 'application/json;charset=utf-8'];
-            $this->client->post('http://127.0.0.1:9999/pyqtsite', $headers, json_encode($discussion));
+        if ($post->number == 1 && $discussion->is_approved && $this->startsWith($url, 'http')) {
+            try {
+                $client = Http::getCachingClient();
+                $client->post($url, [], json_encode($discussion));
+            } catch (Exception $e) {
+            }
         }
+    }
+
+    private function startsWith($haystack, $needle)
+    {
+        return substr_compare($haystack, $needle, 0, strlen($needle)) === 0;
     }
 }
